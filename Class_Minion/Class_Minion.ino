@@ -33,7 +33,7 @@ void loop(void) {
   
   // Let Pi boot up and take photo
   
-  for (int i = 1; i <= 9; i++){
+  for (int i = 1; i <= 8; i++){
     LowPower.powerDown(SLEEP_8S, ADC_OFF, BOD_OFF);
   }
 
