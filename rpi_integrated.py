@@ -65,7 +65,7 @@ permu_array=np.array(combo)
 permu_array=combo
 
 #Image naming using for loop
-image= Image.open('dino1.jpg')
+
 for i in range(total_per):
     condition=permu_array[i]
     fps=condition[0]
