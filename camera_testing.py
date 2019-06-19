@@ -22,22 +22,22 @@ fps_lst=[15,24]
 
 iso_lst=[100,300]
 
-def off():
-	GPIO.output(light, 0)
-
 def on():
 	GPIO.output(light, 1)
+
+def off():
+	GPIO.output(light, 0)
 
 def picture(fr,iso):
         camera.resolution = (2592, 1944)
         camera.framerate = fr
-	camera.iso = iso
         camera.start_preview()
 	pictime = datetime.now().strftime('%Y_%m_%d_%H-%M-%S.%f')[:-4] 
 	#picTime = time.ctime()
 	#t = str(picTime)
 	time.sleep(5)
 	camera.shutter_speed = 4000
+	camera.iso = iso
         time.sleep(2)
 	camera.capture('/home/pi/Documents/minion_pics/%s_FR%s_ISO%s.jpg' %(pictime,fr,iso))
 	time.sleep(5)
@@ -48,7 +48,7 @@ if __name__ == '__main__':
 #        status = os.system(ping_hub)
 
 #        if status == 0:
-#                status = "Connected"
+#               status = "Connected"
 #		os.system(subp)
 #		quit()
 #        else:
@@ -61,23 +61,24 @@ if __name__ == '__main__':
 	GPIO.setup(light, GPIO.OUT)
 #	GPIO.setup(wifi, GPIO.OUT)
 #	GPIO.output(wifi, 1)
+
 	on()
 	for i in fps_lst:
     		for j in iso_lst:  
 			picture(i,j)
-
 	#picture()
 	time.sleep(1)
+
 	off()
 	#time.sleep(5)
-	#print(pictime)
+	print(pictime)
 
 #	if status == "Connected":
 #		os.system(subp)
 #	else:
 #		GPIO.output(wifi, 0)
 #		time.sleep(6)
-	#print("Shutting down.")
-	time.sleep(1)
+	print("Shutting down.")
+#	time.sleep(1)
 #		os.system('sudo shutdown now')
-	os.system('sudo shutdown now')
+#	os.system('sudo shutdown now')
