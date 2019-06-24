@@ -1,10 +1,10 @@
 import time
-import RPi.GPIO as GPIO
-from picamera import PiCamera
-import os
-from subprocess import check_output
-from datetime import datetime
-import numpy as np
+import RPi.GPIO as GPIO 
+from picamera import PiCamera 
+import os 
+from subprocess import check_output 
+from datetime import datetime 
+import numpy as np 
 from PIL import Image
 
 GPIO.setwarnings(False)
@@ -19,43 +19,43 @@ subp = "sudo pkill -9 -f ADXL345_Sampler_100Hz.py"
 
 
 
-#Looping through frame rate:
+##Looping through frame rate:
 fps_top=30
 fps_bottom=15
-fps_increment=10
+fps_increment=15
 fps_lst=[]
 i= fps_bottom
 
 for i in range (fps_bottom,fps_top+1,fps_increment):
     fps_lst.append(i)
 
-#Looping though ISO:
+##Looping though ISO:
 
 iso_top=800
 iso_bottom=100
-iso_increment=200
+iso_increment=100
 iso_lst=[]
 j=iso_bottom
 
 for j in range (iso_bottom,iso_top+1,iso_increment):
     iso_lst.append(j)              
 
-#Combinding both lists to get all possible permutations
-#Total permutations saved on total_per
+##Combinding both lists to get all possible permutations
+##Total permutations saved on total_per
 combo=[]
 total_per=0
 
-for a in fps_lst:              #for a variable (a) in list 1
-    for b in iso_lst:          #for a variable (b) in list 2
-        combo.append([a,b])    #append variables a and b into list called combo
+for a in fps_lst:              ##for a variable (a) in list 1
+    for b in iso_lst:          ##for a variable (b) in list 2
+        combo.append([a,b])    ##append variables a and b into list called combo
         total_per=total_per+1
         
         
-#Making an array called permu_array and placing it in a list       
+##Making an array called permu_array and placing it in a list       
 permu_array=np.array(combo)
 permu_array=combo
 
-#Image naming using for loop
+##Image naming using for loop
 
 for i in range(total_per):
     condition=permu_array[i]
@@ -63,26 +63,30 @@ for i in range(total_per):
     iso=condition[1]
     
 
+##Camera Functions
+
 def off():
-	GPIO.output(light, 0)
+	GPIO.output(light, 0)  ##General purpose input output. Output pins turn RPI on or off.
+			       ##Light off
 
 def on():
-	GPIO.output(light, 1)
+	GPIO.output(light, 1)  ##Light on
 
 def picture(fr,iso):
-        camera.resolution = (2592, 1944)
-        camera.framerate = fr
-	camera.iso = iso
-        camera.start_preview()
-	pictime = datetime.now().strftime('%Y_%m_%d_%H-%M-%S.%f')[:-4] 
+        camera.resolution = (2592, 1944) #Resolution for RPI
+        camera.framerate = fr ##Cycling through framerate
+	camera.iso = iso ##Cycling through ISO
+        camera.start_preview() ##Displays what is currently in camera frame
+	pictime = datetime.now().strftime('%Y_%m_%d_%H-%M-%S.%f')[:-4] ##Format for naming images
 	#picTime = time.ctime()
 	#t = str(picTime)
-	time.sleep(2) #why for do you sleep here changed from 5 to 2
+	time.sleep(7) ##upon start preview, time in seconds of sleep before adjusting shutter speed    
 	camera.shutter_speed = 4000
-        time.sleep(2) #common practice to sleep before taking a picture
-	camera.capture('/home/pi/Documents/minion_pics/%s_FR%s_ISO%s.jpg' %(pictime,fr,iso))
-	time.sleep(2) 
-	camera.stop_preview()
+        time.sleep(3) ##post adjusting shutterspeed, time in secs. sleep before capturing photo
+	camera.capture('/home/pi/Documents/Test_Camera/Test_Pics/%s_FR%s_ISO%s.jpg' %(pictime,fr,iso)) ##Images captured will be stored in this path
+	time.sleep(2) ## seconds of sleep after photo is captured before stop preview
+	camera.stop_preview() ##Display showing what is in camera frame closes.
+			      ##This programs will loop until all photos are taken.
 
 if __name__ == '__main__':
 
@@ -103,15 +107,13 @@ if __name__ == '__main__':
 #	GPIO.setup(wifi, GPIO.OUT)
 #	GPIO.output(wifi, 1)
 
-	on()
+	on() ##Calling on() function
 #	time.sleep(2)
 	for i in fps_lst:
     		for j in iso_lst:  
-			picture(i,j)
-	#picture()
-	
+			picture(i,j) ##Calling picture() function to cycle through all FR and ISO
 
-	off()
+	off() ##Caling off() function
 	#time.sleep(5)
 	#print(pictime)
 
@@ -121,6 +123,7 @@ if __name__ == '__main__':
 #		GPIO.output(wifi, 0)
 #		time.sleep(6)
 	#print("Shutting down.")
-	time.sleep(1)
+	time.sleep(1) ##Sec(s). of sleep before turning off
 #		os.system('sudo shutdown now')
-	os.system('sudo shutdown now')
+#	os.system('sudo shutdown now')  ##Shut down computer following execusion of program
+
