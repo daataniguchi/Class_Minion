@@ -17,37 +17,28 @@ ping_hub = "ping 192.168.0.1 -c 1"
 
 subp = "sudo pkill -9 -f ADXL345_Sampler_100Hz.py"
 
+
+
 #Looping through frame rate:
+fps_top=30
+fps_bottom=15
+fps_increment=10
+fps_lst=[]
+i= fps_bottom
 
-fps_top=30                                              #fps_top is the max(top) frame rate limit
-fps_bottom=15                                           #fps_bottom is the min(bottom) frame rate limit
-fps_increment=12                                        #fps_increment is the increment value
-fps_lst=[fps_bottom]                                    #fps_lst the list in which frame rates will go, starting with the lower limit
-
-
-
-while fps_bottom < fps_top:                             #Conditions set for the while loop: while top limit < bottom limit
-    fps_bottom=fps_bottom+fps_increment                 # addition of fps_increment + fps_bottom= fps_bottom
-    fps_lst.append(fps_bottom)                          # appending the new fps_bottom value to fps_lst
-    
-if fps_lst[len(fps_lst)-1] > fps_top:                   #If the last number is greater than the top limit
-    fps_lst.pop()                                       #Then it will be popped out (won't be included in final list)
+for i in range (fps_bottom,fps_top+1,fps_increment):
+    fps_lst.append(i)
 
 #Looping though ISO:
 
-iso_top=800                                             #iso_top is the max(top) iso limit
-iso_bottom=100                                          #iso_bottom is the min(bottom) iso limit
-iso_increment=250                                       #iso_increment is the increment value
-iso_lst=[iso_bottom]                                    #iso_lst the list in which ISO values will go, starting with the lower limit
+iso_top=800
+iso_bottom=100
+iso_increment=200
+iso_lst=[]
+j=iso_bottom
 
-
-while iso_bottom < iso_top:                             # Conditions for the while loop: while the iso bottom limit is < iso top limit
-    iso_bottom=iso_bottom+iso_increment                 # add iso_bottom and increments to replace iso_bottom valeu (Adding itself + increment)
-    iso_lst.append(iso_bottom)                          # append the new iso_bottom value to iso_lst
-    
-
-if iso_lst[len(iso_lst)-1] > iso_top:                   # if the last number is greater than top limit it will be popped out and it won't be included in final list
-    iso_lst.pop()                                   
+for j in range (iso_bottom,iso_top+1,iso_increment):
+    iso_lst.append(j)              
 
 #Combinding both lists to get all possible permutations
 #Total permutations saved on total_per
@@ -71,8 +62,6 @@ for i in range(total_per):
     fps=condition[0]
     iso=condition[1]
     
-    #print('Condition:',condition,' fps:',str(fps),' iso:',str(iso))
-    #image.save('my_dino_FR%s_ISO%s.jpg' %(fps,iso))
 
 def off():
 	GPIO.output(light, 0)
@@ -88,11 +77,11 @@ def picture(fr,iso):
 	pictime = datetime.now().strftime('%Y_%m_%d_%H-%M-%S.%f')[:-4] 
 	#picTime = time.ctime()
 	#t = str(picTime)
-	time.sleep(5)
+	time.sleep(2) #why for do you sleep here changed from 5 to 2
 	camera.shutter_speed = 4000
-        time.sleep(2)
+        time.sleep(2) #common practice to sleep before taking a picture
 	camera.capture('/home/pi/Documents/minion_pics/%s_FR%s_ISO%s.jpg' %(pictime,fr,iso))
-	time.sleep(5)
+	time.sleep(2) 
 	camera.stop_preview()
 
 if __name__ == '__main__':
@@ -115,11 +104,12 @@ if __name__ == '__main__':
 #	GPIO.output(wifi, 1)
 
 	on()
+#	time.sleep(2)
 	for i in fps_lst:
     		for j in iso_lst:  
 			picture(i,j)
 	#picture()
-	time.sleep(1)
+	
 
 	off()
 	#time.sleep(5)
