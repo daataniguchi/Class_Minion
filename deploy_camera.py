@@ -18,7 +18,7 @@ ping_hub = "ping 192.168.0.1 -c 1"
 subp = "sudo pkill -9 -f ADXL345_Sampler_100Hz.py"
 
 fps_lst=[15, 20, 25, 30]
-iso_lst=[100, 250, 400, 550, 700, 800]    
+iso_lst=[100, 200, 300, 400, 500, 600, 700, 800]    
 
 ##Camera Functions
 
