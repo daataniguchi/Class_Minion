@@ -38,44 +38,48 @@ iso_lst=[]
 j=iso_bottom
 
 for j in range (iso_bottom,iso_top+1,iso_increment):
-    iso_lst.append(j)              
+    iso_lst.append(j)        
+
+
+      
+###Testing to see if the below code can de removed:
+
 
 ##Combinding both lists to get all possible permutations
 ##Total permutations saved on total_per
-combo=[]
-total_per=0
+#combo=[]
+#total_per=0
 
-for a in fps_lst:              ##for a variable (a) in list 1
-    for b in iso_lst:          ##for a variable (b) in list 2
-        combo.append([a,b])    ##append variables a and b into list called combo
-        total_per=total_per+1
+#for a in fps_lst:              ##for a variable (a) in list 1
+#    for b in iso_lst:          ##for a variable (b) in list 2
+#        combo.append([a,b])    ##append variables a and b into list called combo
+#        total_per=total_per+1
         
         
 ##Making an array called permu_array and placing it in a list       
-permu_array=np.array(combo)
-permu_array=combo
+#permu_array=np.array(combo)
+#permu_array=combo
 
 ##Image naming using for loop
 
-for i in range(total_per):
-    condition=permu_array[i]
-    fps=condition[0]
-    iso=condition[1]
+#for i in range(total_per):
+#    condition=permu_array[i]
+#    fps=condition[0]
+#    iso=condition[1]
     
 
 ##Camera Functions
 
 def off():
-	GPIO.output(light, 0)  ##General purpose input output. Output pins turn RPI on or off.
-			       ##Light off
+	GPIO.output(light, 0)  ##Light off
 
 def on():
 	GPIO.output(light, 1)  ##Light on
 
 def picture(fr,iso):
         camera.resolution = (2592, 1944) #Resolution for RPI
-        camera.framerate = fr ##Cycling through framerate
-	camera.iso = iso ##Cycling through ISO
+        camera.framerate = fr ## framerate
+	camera.iso = iso ## ISO
         camera.start_preview() ##Displays what is currently in camera frame
 	pictime = datetime.now().strftime('%Y_%m_%d_%H-%M-%S.%f')[:-4] ##Format for naming images
 	#picTime = time.ctime()
@@ -124,6 +128,6 @@ if __name__ == '__main__':
 #		time.sleep(6)
 	#print("Shutting down.")
 	time.sleep(1) ##Sec(s). of sleep before turning off
-#		os.system('sudo shutdown now')
+#		os.system('sudo shutdown now') ##Shut down computer follwoing execusion of program
 #	os.system('sudo shutdown now')  ##Shut down computer following execusion of program
 
