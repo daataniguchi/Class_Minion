@@ -1,3 +1,5 @@
+## This code is used when the camera is deployed in water, it will sudo shutdown now
+
 import time
 import RPi.GPIO as GPIO 
 from picamera import PiCamera 
@@ -18,12 +20,12 @@ ping_hub = "ping 192.168.0.1 -c 1"
 subp = "sudo pkill -9 -f ADXL345_Sampler_100Hz.py"
 
 fps_lst=[15, 20, 25, 30]
-iso_lst=[100, 200, 300, 400, 500, 600, 700, 800]    
+iso_lst=[500, 600, 700, 800]    
 
 ##Camera Functions
 
 def off():
-	GPIO.output(light, 0)  ##General purpose input output. Output pins turn RPI on or off.
+	GPIO.output(light, 0)  ##General purpose input output.
 			       ##Light off
 
 def on():
@@ -37,7 +39,7 @@ def picture(fr,iso):
 	pictime = datetime.now().strftime('%Y_%m_%d_%H-%M-%S.%f')[:-4] ##Format for naming images
 	#picTime = time.ctime()
 	#t = str(picTime)
-	time.sleep(7) ##upon start preview, time in seconds of sleep before adjusting shutter speed    
+	time.sleep(2) ##upon start preview, time in seconds of sleep before adjusting shutter speed    
 	camera.shutter_speed = 4000
         time.sleep(3) ##post adjusting shutterspeed, time in secs. sleep before capturing photo
 	camera.capture('/home/pi/Documents/Test_Camera/Test_Pics/%s_FR%s_ISO%s.jpg' %(pictime,fr,iso)) ##Images captured will be stored in this path
@@ -68,6 +70,10 @@ if __name__ == '__main__':
 #	time.sleep(2)
 	for i in fps_lst:
     		for j in iso_lst:  
+			picture(i,j)
+			picture(i,j)
+			picture(i,j)
+			picture(i,j)
 			picture(i,j) ##Calling picture() function to cycle through all FR and ISO
 
 	off() ##Caling off() function
