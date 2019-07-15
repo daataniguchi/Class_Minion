@@ -39,7 +39,7 @@ def picture(fr,iso):
 	camera.shutter_speed = 4000
 	camera.iso = iso
         time.sleep(2)
-	camera.capture('/home/pi/Documents/minion_pics/%s_FR%s_ISO%s.jpg' %(pictime,fr,iso))
+	camera.capture('/home/pi/Documents/Minion/minion_pics/%s_FR%s_ISO%s.jpg' %(pictime,fr,iso))
 	time.sleep(5)
 	camera.stop_preview()
 
