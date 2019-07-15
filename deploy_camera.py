@@ -2,7 +2,7 @@
 ## wifi is commented out for now but left in, in case needed
 
 import time
-import RPi.GPIO as GPIO 
+import RPi.GPIO as GPIO #import RPi.GPIO module
 from picamera import PiCamera 
 import os 
 from subprocess import check_output 
@@ -42,7 +42,7 @@ def picture(fr,iso,num_pic):
 		time.sleep(1) ##sleep before capturing photo
 		camera.capture('/home/pi/Documents/Test_Camera/Test_Pics/%s_FR%s_ISO%s.jpg' %(pictime,fr,iso)) ##Images captured and stored in this path
 
-if __name__ == '__main__':
+if __name__ == '__main__': 
 
         status = os.system(ping_hub)
 
@@ -54,11 +54,11 @@ if __name__ == '__main__':
                 status = "Not Connected"
 
 
-	camera = PiCamera()
-	GPIO.setmode(GPIO.BOARD)
-	GPIO.setup(light, GPIO.OUT)
-	#GPIO.setup(wifi, GPIO.OUT)
-	#GPIO.output(wifi, 1)
+	camera = PiCamera() #creating an instance of the PiCamera class
+	GPIO.setmode(GPIO.BOARD) #General purpose input output, for pin numbering 
+	GPIO.setup(light, GPIO.OUT) #Set GPIOlight as an output
+	#GPIO.setup(wifi, GPIO.OUT) #Set GPIOwifi as an output
+	#GPIO.output(wifi, 1) 
 
 	on() ##Calling on() function
 	num_pic=5
