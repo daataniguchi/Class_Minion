@@ -1,3 +1,5 @@
+## This code is used when the camera is deployed in water, it will sudo shutdown now
+
 import time
 import RPi.GPIO as GPIO 
 from picamera import PiCamera 
@@ -15,27 +17,35 @@ ping_hub = "ping 192.168.0.1 -c 1"
 
 subp = "sudo pkill -9 -f ADXL345_Sampler_100Hz.py"
 
+
 fps_lst=[25, 30]
 iso_lst=[500, 600, 700, 800]     
+
 
 ##Camera Functions
 
 def off():
-    GPIO.output(light, 0)  ##Light off
+	GPIO.output(light, 0)  ##General purpose input output.
+			       ##Light off
 
 def on():
-    GPIO.output(light, 1)  ##Light on
+	GPIO.output(light, 1)  ##Light on
 
-def picture(fr,iso,num_pic):
-    camera.resolution = (2592, 1944) #Resolution for RPI
-    camera.framerate = fr ##Defines framerate
-    camera.iso = iso ##Defines ISO
-    pictime = datetime.now().strftime('%Y_%m_%d_%H-%M-%S.%f')[:-4] ##Format for naming images
-    camera.shutter_speed = 4000 ##setting the shutterspeed
-    for i in range(num_pic):  ##taking number of pictures determined by num_pic
-        time.sleep(1) ##post adjusting shutterspeed, time in secs. sleep before capturing photo
-        camera.capture('/home/pi/Documents/Test_Camera/Test_Pics/%s_FR%s_ISO%s.jpg' %(pictime,fr,iso)) ##Images captured will be stored in this path
-
+def picture(fr,iso):
+        camera.resolution = (2592, 1944) #Resolution for RPI
+        camera.framerate = fr ##Cycling through framerate
+	camera.iso = iso ##Cycling through ISO
+        camera.start_preview() ##Displays what is currently in camera frame
+	pictime = datetime.now().strftime('%Y_%m_%d_%H-%M-%S.%f')[:-4] ##Format for naming images
+	#picTime = time.ctime()
+	#t = str(picTime)
+	time.sleep(2) ##upon start preview, time in seconds of sleep before adjusting shutter speed    
+	camera.shutter_speed = 4000
+        time.sleep(3) ##post adjusting shutterspeed, time in secs. sleep before capturing photo
+	camera.capture('/home/pi/Documents/Test_Camera/Test_Pics/%s_FR%s_ISO%s.jpg' %(pictime,fr,iso)) ##Images captured will be stored in this path
+	time.sleep(2) ## seconds of sleep after photo is captured before stop preview
+	camera.stop_preview() ##Display showing what is in camera frame closes.
+			      ##This programs will loop until all photos are taken.
 
 if __name__ == '__main__':
 
@@ -48,29 +58,37 @@ if __name__ == '__main__':
 #        else:
 #                status = "Not Connected"
 
-    #print(status)
 
-    camera = PiCamera()
-    GPIO.setmode(GPIO.BOARD)
-    GPIO.setup(light, GPIO.OUT)
-    #GPIO.setup(wifi, GPIO.OUT)
-    #GPIO.output(wifi, 1)
+#	print(status)
 
-    on() ##Calling on() function
-    #time.sleep(2)
-    for i in fps_lst:
-        for j in iso_lst:  
-            picture(i,j,5) ##Calling picture() function to cycle through all FR and ISO
+   	camera = PiCamera()
+	GPIO.setmode(GPIO.BOARD)
+	GPIO.setup(light, GPIO.OUT)
+#	GPIO.setup(wifi, GPIO.OUT)
+#	GPIO.output(wifi, 1)
 
-    off() ##Calling off() function
-    #time.sleep(5)
-    #print(pictime)
+	on() ##Calling on() function
+#	time.sleep(2)
+	for i in fps_lst:
+    		for j in iso_lst:  
+			picture(i,j)
+			picture(i,j)
+			picture(i,j)
+			picture(i,j)
+			picture(i,j) ##Calling picture() function to cycle through all FR and ISO
 
-    #if status == "Connected":
-        #os.system(subp)
-    #else:
-        #GPIO.output(wifi, 0)
-        #time.sleep(6)
-    #print("Shutting down.")
-    time.sleep(1) ##Sec(s). of sleep before turning off
-        os.system('sudo shutdown now') ##Shut down computer following excecusion of program
+	off() ##Caling off() function
+	#time.sleep(5)
+	#print(pictime)
+
+#	if status == "Connected":
+#		os.system(subp)
+#	else:
+#		GPIO.output(wifi, 0)
+#		time.sleep(6)
+	#print("Shutting down.")
+	time.sleep(1) ##Sec(s). of sleep before turning off
+		os.system('sudo shutdown now') ##Shut down computer following excecusion of program
+	os.system('sudo shutdown now')  ##Shut down computer following execusion of program
+
+
