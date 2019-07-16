@@ -42,9 +42,11 @@ def picture(fr,iso,num_pic):
 		time.sleep(1) ##sleep before capturing photo
 		camera.capture('/home/pi/Documents/Test_Camera/Test_Pics/%s_FR%s_ISO%s.jpg' %(pictime,fr,iso)) ##Images captured and stored in this path
 
+
 if __name__ == '__main__': 
 
         status = os.system(ping_hub)
+
 
         if status == 0:
                 status = "Connected"
