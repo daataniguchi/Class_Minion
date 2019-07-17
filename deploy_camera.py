@@ -24,7 +24,7 @@ subp = "sudo pkill -9 -f ADXL345_Sampler_100Hz.py" ##stops the code ADXL345_Samp
 ## Framerate and ISO values to be used
 
 fps_lst=[25, 30] ##framerate in frames per second
-iso_lst=[500, 600, 700, 800] ##how long light is let in
+iso_lst=[800] ##how long light is let in
 
 
 ## Camera Functions
@@ -79,4 +79,4 @@ if __name__ == '__main__': #if this is the main code then executes following cod
 	else:
         	#GPIO.output(wifi, 0) # turns wifi off
         	time.sleep(1) ##sleep before turning off
-        	os.system('sudo shutdown now') ##Shut down computer following excecusion of program
+        	os.system('sudo shutdown now') ##Shut down computer following execusion of program
