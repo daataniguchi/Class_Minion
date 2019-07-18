@@ -1,86 +1,85 @@
-##This is the code used at SIO to test camera with plankton in seawater. It was turning the monitor off as soon as the code began, so there was no way to know when it was finished. Every difference between this code and the most up to date code has been commented on. (SB)
+##This is the code used at SIO to test camera with plankton in seawater.
+##Start and stop preview are active in thei program
+##Sudo shut down now has been commented off
 
-import time
-import RPi.GPIO as GPIO
-from picamera import PiCamera
-import os
-from subprocess import check_output
-from datetime import datetime
-import numpy as np
-from PIL import Image
+## Importing libraries
+
+import time 
+import RPi.GPIO as GPIO 
+from picamera import PiCamera 
+import os 
+from subprocess import check_output 
+from datetime import datetime 
+
+##Setting up the system
+
+GPIO.setwarnings(False) ##disables warning messages 
+
+light = 12 ##Light is set to be pin 12  
+#wifi = 7 ##wifi is set to be pin 7
+
+ping_hub = "ping 192.168.0.1 -c 1" ##verify IP exists and can accept requests
+
+subp = "sudo pkill -9 -f ADXL345_Sampler_100Hz.py" ##stops the code ADXL345_Sampler_100Hz.py
+
+## Framerate and ISO values to be used
+
+fps_lst=[25, 30] ##framerate in frames per second
+iso_lst=[500,600,700,800] ##how long light is let in
 
 
-GPIO.setwarnings(False)
-
-i = 0
-light = 12
-#wifi = 7
-
-ping_hub = "ping 192.168.0.1 -c 1"
-
-subp = "sudo pkill -9 -f ADXL345_Sampler_100Hz.py"
-
-fps_lst=[15,24] ##rpi_integrated code has "fps_lst=[15, 20, 25, 30]"
-
-iso_lst=[100,300] ##rpi_integrated code has "iso_lst=[500, 600, 700, 800]"
-
-def on():
-	GPIO.output(light, 1) ##rpi_integrated code has def on() and def off() in switched positions. I don't think this would have an affect on turning the preview off though (SB)
+## Camera Functions
 
 def off():
-	GPIO.output(light, 0)
+	GPIO.output(light, 0)  ##Light off
 
-def picture(fr,iso):
-        camera.resolution = (2592, 1944)
-        camera.framerate = fr
-        camera.start_preview()
-	pictime = datetime.now().strftime('%Y_%m_%d_%H-%M-%S.%f')[:-4] 
-	#picTime = time.ctime()
-	#t = str(picTime)
-	time.sleep(5) ##rpi_integrated code has time.sleep(2)
-	camera.shutter_speed = 4000
-	camera.iso = iso ##rpi_integrated code has this after "camera.framerate = fr" 
-        time.sleep(2)
-	camera.capture('/home/pi/Documents/minion_pics/%s_FR%s_ISO%s.jpg' %(pictime,fr,iso))##rpi_integrated code has "camera.capture('/home/pi/Documents/Test_Camera/Test_Pics/%s_FR%s_ISO%s.jpg' %(pictime,fr,iso))"
-	time.sleep(5) ##rpi_integrated code has time.sleep(2)
+def on():
+	GPIO.output(light, 1)  ##Light on
+
+def picture(fr,iso,num_pic):
+	camera.resolution = (2592, 1944) ##Resolution for Raspberry Pi
+	camera.framerate = fr ##Defines framerate
+	camera.iso = iso ##Defines ISO
+	pictime = datetime.now().strftime('%Y_%m_%d_%H-%M-%S.%f')[:-4] ##Format date for naming images
+	camera.shutter_speed = 4000 ##setting the shutterspeed
+	camera.start_preview()
+	camera.capture('/home/pi/Documents/Test_Camera/Test_Pics/%s_FR%s_ISO%s.jpg' %(pictime,fr,iso)) ##Images captured and stored in this path
 	camera.stop_preview()
 
-if __name__ == '__main__':
+if __name__ == '__main__': #if this is the main code then executes following code 
 
-#        status = os.system(ping_hub)
+        status = os.system(ping_hub) #checks connection to os 
 
-#        if status == 0:
-#               status = "Connected"
-#		os.system(subp)
-#		quit()
-#        else:
-#                status = "Not Connected"
 
-#	print(status)
+        if status == 0: # means connection is good, runs stop code 'subp' then quits
+                status = "Connected"
+        	os.system(subp)
+        	quit()
+        else:
+                status = "Not Connected" # if ping returns a non-zero value the connection failed
 
-   	camera = PiCamera()
-	GPIO.setmode(GPIO.BOARD)
-	GPIO.setup(light, GPIO.OUT)
-#	GPIO.setup(wifi, GPIO.OUT)
-#	GPIO.output(wifi, 1)
 
-	on()
-	for i in fps_lst:
-    		for j in iso_lst:  
-			picture(i,j)##rpi_integrated code has this repeated for a total of 5 pictures
-	#picture()   ##rpi_integrated code does not have this line or the time.sleep(1) one line below
-	time.sleep(1)
+	camera = PiCamera() #creating an instance of the PiCamera class
+	GPIO.setmode(GPIO.BOARD) #General purpose input output, for pin numbering 
+	GPIO.setup(light, GPIO.OUT) #Set light as an output
+	#GPIO.setup(wifi, GPIO.OUT) #Set wifi as an output
+	#GPIO.output(wifi, 1) #turns wifi on
 
-	off()
-	#time.sleep(5)
-	print(pictime) ##rpi_integrated code has this commented out
+	on() ##Calling on() function
+	
+	num_pic=5 #defines how many pictures to take at a particular camera setting
+        for k in range(num_pic):
+		for i in fps_lst:
+        		for j in iso_lst:
+                        	time.sleep(2) ##sleep before capturing photo
+                        	picture(i,j,num_pic) ##Calling picture() function to cycle through all FR and ISO and take num_pic number of pictures 
 
-#	if status == "Connected":
-#		os.system(subp)
-#	else:
-#		GPIO.output(wifi, 0)
-#		time.sleep(6)
-	print("Shutting down.") ##rpi_integrated code has this commented out
-#	time.sleep(1)
-#		os.system('sudo shutdown now')
-#	os.system('sudo shutdown now')
+	off() ##Calling off() function
+	
+
+	if status == "Connected": #if connected run 
+        	os.system(subp) #kills 'subp'
+	else:
+        	#GPIO.output(wifi, 0) # turns wifi off
+        	time.sleep(1) ##sleep before turning off
+#        	os.system('sudo shutdown now') ##Shut down computer following execusion of program
