@@ -24,7 +24,7 @@ subp = "sudo pkill -9 -f ADXL345_Sampler_100Hz.py" ##stops the code ADXL345_Samp
 ## Framerate and ISO values to be used
 
 fps_lst=[25, 30] ##framerate in frames per second
-iso_lst=[800] ##how long light is let in
+iso_lst=[500,600,700,800] ##how long light is let in
 
 
 ## Camera Functions
@@ -41,9 +41,7 @@ def picture(fr,iso,num_pic):
 	camera.iso = iso ##Defines ISO
 	pictime = datetime.now().strftime('%Y_%m_%d_%H-%M-%S.%f')[:-4] ##Format date for naming images
 	camera.shutter_speed = 4000 ##setting the shutterspeed
-	for k in range(num_pic):  ##taking number of pictures determined by num_pic
-		time.sleep(1) ##sleep before capturing photo
-		camera.capture('/home/pi/Documents/Test_Camera/Test_Pics/%s_FR%s_ISO%s.jpg' %(pictime,fr,iso)) ##Images captured and stored in this path
+	camera.capture('/home/pi/Documents/Test_Camera/Test_Pics/%s_FR%s_ISO%s.jpg' %(pictime,fr,iso)) ##Images captured and stored in this path
 
 
 if __name__ == '__main__': #if this is the main code then executes following code 
@@ -66,9 +64,12 @@ if __name__ == '__main__': #if this is the main code then executes following cod
 	#GPIO.output(wifi, 1) #turns wifi on
 
 	on() ##Calling on() function
+
 	num_pic=5 #defines how many pictures to take at a particular camera setting
-        for i in fps_lst:
-        	for j in iso_lst:  
+        for k in range(num_pic):
+		for i in fps_lst:
+        		for j in iso_lst:
+			time.sleep(2) ##sleep before capturing photo  
             		picture(i,j,num_pic) ##Calling picture() function to cycle through all FR and ISO and take num_pic number of pictures 
 
 	off() ##Calling off() function
