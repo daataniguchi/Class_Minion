@@ -1,6 +1,5 @@
-##This is the code used at SIO to test camera with plankton in seawater.
-##Start and stop preview are active in thei program
-##Sudo shut down now has been commented off
+## This code is used when the camera is deployed in water, it will sudo shutdown now
+## wifi is commented out for now but left in, in case needed
 
 ## Importing libraries
 
@@ -42,9 +41,8 @@ def picture(fr,iso,num_pic):
 	camera.iso = iso ##Defines ISO
 	pictime = datetime.now().strftime('%Y_%m_%d_%H-%M-%S.%f')[:-4] ##Format date for naming images
 	camera.shutter_speed = 4000 ##setting the shutterspeed
-	camera.start_preview()
 	camera.capture('/home/pi/Documents/Test_Camera/Test_Pics/%s_FR%s_ISO%s.jpg' %(pictime,fr,iso)) ##Images captured and stored in this path
-	camera.stop_preview()
+
 
 if __name__ == '__main__': #if this is the main code then executes following code 
 
@@ -66,13 +64,13 @@ if __name__ == '__main__': #if this is the main code then executes following cod
 	#GPIO.output(wifi, 1) #turns wifi on
 
 	on() ##Calling on() function
-	
+
 	num_pic=5 #defines how many pictures to take at a particular camera setting
         for k in range(num_pic):
 		for i in fps_lst:
         		for j in iso_lst:
-                        	time.sleep(2) ##sleep before capturing photo
-                        	picture(i,j,num_pic) ##Calling picture() function to cycle through all FR and ISO and take num_pic number of pictures 
+			time.sleep(2) ##sleep before capturing photo  
+            		picture(i,j,num_pic) ##Calling picture() function to cycle through all FR and ISO and take num_pic number of pictures 
 
 	off() ##Calling off() function
 	
@@ -82,4 +80,4 @@ if __name__ == '__main__': #if this is the main code then executes following cod
 	else:
         	#GPIO.output(wifi, 0) # turns wifi off
         	time.sleep(1) ##sleep before turning off
-#        	os.system('sudo shutdown now') ##Shut down computer following execusion of program
+        	os.system('sudo shutdown now') ##Shut down computer following execusion of program
