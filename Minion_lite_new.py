@@ -1,10 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Sat Jul 20 09:41:57 2019
-
-@author: myste
-"""
-
 #!/usr/bin/env python
 
 ## Importing libraries
@@ -24,7 +17,7 @@ i = 0
 light = 12 #light is set to be pin 12
 wifi = 38 #wifi is set to be pin 38
 
-net_cfg = "ls /etc/ | grep dhcp"
+net_cfg = "ls /etc/ | grep dhcp" #configures network
 
 ping_hub = "ping 192.168.0.1 -c 1" #verify IP exists and can accept requests
 
@@ -56,7 +49,7 @@ def off():
 def on():
 	GPIO.output(light, 1) #light off
 
-def picture():
+def picture(fr,iso,num_pic):
     #pictime = time.asctime(time.gmtime())
     pictime = os.popen("sudo hwclock -r").read()
     #pictime = pictime.split('.',1)[0]
@@ -65,18 +58,19 @@ def picture():
     #pictime = pictime.replace(":","-")
     #pictime = pictime.split('.',1)[0]
     pictime = datetime.now().strftime('%Y_%m_%d_%H-%M-%S.%f')[:-4] #format date for naming images
-	on()
+	on() #calling on function
     camera.resolution = (2592, 1944) #resolution for Raspberry Pi
     camera.framerate = fr #defines framerate
     camera.iso = iso #defines iso
-    camera.shutter_speed = 4000
-    camera.start_preview()
-	time.sleep(10)
-	camera.capture('/home/pi/Documents/minion_pics/minpic_%s.jpg' % pictime)
-	time.sleep(5)
-	camera.stop_preview()
-	time.sleep(.5)
-	off()
+    camera.shutter_speed = 4000 # setting the shutter speed
+    camera.start_preview() #when connected to a monitor this turns on camera preview
+	time.sleep(10) #ten second sleep
+	#camera.capture('/home/pi/Documents/minion_pics/minpic_%s.jpg' % (pictime,fr,iso)) #this format for capturing and saving pictures at SIO
+	camera.capture('/home/pi/Documents/Test_Camera/Test_Pics/%s_FR%s_ISO%s.jpg' %(pictime,fr,iso)) ##this format for capturing and saving Images at CSUSM
+	time.sleep(5) #five second sleep
+	camera.stop_preview() #when connected to a monitor this turns off camera preview 
+	time.sleep(.5) # half second sleep
+	off() #calling off function
 
 if __name__ == '__main__':
 
