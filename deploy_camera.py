@@ -34,20 +34,20 @@ iso_lst = [500, 600, 700, 800] #how long light is let in
 
 ## Camera Functions
 
-def flash(): #I don't know what this does, maybe makes the LED flash 
-	j = 0
-	while j <= 2:
-		GPIO.output(light, 1)
-		time.sleep(.25)
-		GPIO.output(light, 0)
-		time.sleep(.25)
-		j = j + 1
+def flash(): #makes the LED flash 
+    j = 0
+    while j <= 2:
+        GPIO.output(light, 1)
+        time.sleep(.25)
+        GPIO.output(light, 0)
+        time.sleep(.25)
+        j = j + 1
 
 def off():
     GPIO.output(light, 0) #light off 
 
 def on():
-	GPIO.output(light, 1) #light off
+    GPIO.output(light, 1) #light off
 
 def picture(fr,iso):
     #pictime = time.asctime(time.gmtime())
