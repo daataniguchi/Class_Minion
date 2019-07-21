@@ -51,12 +51,12 @@ def on():
 
 def picture(fr,iso,num_pic):
     #pictime = time.asctime(time.gmtime())
-    pictime = os.popen("sudo hwclock -r").read()
-    #pictime = pictime.split('.',1)[0]
-    #pictime = pictime.replace("  ","_")
-    #pictime = pictime.replace(" ","_")
-    #pictime = pictime.replace(":","-")
-    #pictime = pictime.split('.',1)[0]
+    pictime = os.popen("sudo hwclock -r").read() #format for real time clock 
+    pictime = pictime.split('.',1)[0]
+    pictime = pictime.replace("  ","_") #replaces a space with an underscore
+    pictime = pictime.replace(" ","_") #replaces a space with an underscore
+    pictime = pictime.replace(":","-") #replaces a colon with a hyphen
+    pictime = pictime.split('.',1)[0]
     pictime = datetime.now().strftime('%Y_%m_%d_%H-%M-%S.%f')[:-4] #format date for naming images
 	on() #calling on function
     camera.resolution = (2592, 1944) #resolution for Raspberry Pi
@@ -72,19 +72,19 @@ def picture(fr,iso,num_pic):
 	time.sleep(.5) # half second sleep
 	off() #calling off function
 
-if __name__ == '__main__':
+if __name__ == '__main__': #if this is the main code then executes following code 
 
-   	camera = PiCamera()
-	GPIO.setmode(GPIO.BOARD)
-	GPIO.setup(light, GPIO.OUT)
-	GPIO.setup(wifi, GPIO.OUT)
-	GPIO.output(wifi, 0)
-    num_pic = 5
+   	camera = PiCamera() #creating an instance of the PiCamera class
+	GPIO.setmode(GPIO.BOARD) #General purpose input output, for pin numbering
+	GPIO.setup(light, GPIO.OUT) #sets light as an output
+	GPIO.setup(wifi, GPIO.OUT) #sets wifi as an output
+	GPIO.output(wifi, 0) #turns wifi on 
+    num_pic = 5 #defines how many pictures to take at a particular camera setting 
     for k in range(num_pic):
         for i in fps_lst:
             for j in iso_lst:
             time.sleep(2)
-            picture(i,j,num_pic)
+            picture(i,j,num_pic) #Calling picture() function to cycle through all FR and ISO and take num_pic number of pictures
 
 	#print pictime
 
