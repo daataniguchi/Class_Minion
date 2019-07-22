@@ -49,7 +49,7 @@ def picture(fr,iso):
     pictime = datetime.now().strftime('%Y_%m_%d_%H-%M-%S.%f')[:-4] ##Format date for naming images
     camera.shutter_speed = 4000 ##setting the shutterspeed
     camera.start_preview()
-    camera.capture('/home/pi/Documents/Test_Camera/Test_Pics/%s_FR%s_ISO%s.jpg' %(pictime,fr,iso)) ##Images captured and stored in this path
+    camera.capture('/home/pi/Documents/minion_pics/minpic_%s_FR%s_ISO%s.jpg' %(pictime,fr,iso)) #this format for capturing and saving pictures at SIO
     camera.stop_preview()
        
 
