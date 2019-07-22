@@ -65,8 +65,8 @@ def picture(fr,iso):
     camera.shutter_speed = 4000 # setting the shutter speed
     camera.start_preview() #when connected to a monitor this turns on camera preview
     time.sleep(10) #ten second sleep
-    #camera.capture('/home/pi/Documents/minion_pics/minpic_%s_FR%s_ISO%s.jpg' %(pictime,fr,iso)) #this format for capturing and saving pictures at SIO
-    camera.capture('/home/pi/Documents/Test_Camera/Test_Pics/%s_FR%s_ISO%s.jpg' %(pictime,fr,iso)) #this format for capturing and saving Images at CSUSM
+    camera.capture('/home/pi/Documents/minion_pics/minpic_%s_FR%s_ISO%s.jpg' %(pictime,fr,iso)) #this format for capturing and saving pictures at SIO
+    #camera.capture('/home/pi/Documents/Test_Camera/Test_Pics/%s_FR%s_ISO%s.jpg' %(pictime,fr,iso)) #this format for capturing and saving Images at CSUSM
     time.sleep(5) #five second sleep
     camera.stop_preview() #when connected to a monitor this turns off camera preview 
     time.sleep(.5) # half second sleep
